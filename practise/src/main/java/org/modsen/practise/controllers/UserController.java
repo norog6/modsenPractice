@@ -45,4 +45,4 @@ public class UserController {
         RegisterResponseDto registerResponse = authService.register(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(registerResponse);
     }
-}пше
+}
