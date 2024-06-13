@@ -48,7 +48,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
+    public AuthenticationManager authenticationManager() {
         return authentication -> {
             UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
