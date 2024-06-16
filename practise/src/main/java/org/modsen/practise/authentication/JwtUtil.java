@@ -51,9 +51,6 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000L * expirationTimeInSeconds))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
 
     public Boolean validateToken(String token) {
         try {
