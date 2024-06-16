@@ -13,16 +13,16 @@ public class User {
     private String email;
 
     @Column(unique = true)
-    private String login;
+    private String username;
 
     private String password;
 
     public User() {
     }
 
-    public User(String email, String login, String password) {
+    public User(String email, String username, String password) {
         this.email = email;
-        this.login = login;
+        this.username = username;
         this.password = password;
     }
 
@@ -42,12 +42,12 @@ public class User {
         this.email = email;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String login) {
+        this.username = login;
     }
 
     public String getPassword() {
