@@ -19,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class JwtRequestFilter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private final UserDetailsService userDetailsService;
@@ -27,7 +27,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Value("${jwt.secret}")
     private String secret;
 
-    public JwtRequestFilter(UserDetailsService userDetailsService) {
+    public JwtFilter(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
