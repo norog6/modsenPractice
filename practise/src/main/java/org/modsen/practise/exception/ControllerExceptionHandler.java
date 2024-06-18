@@ -1,6 +1,6 @@
 package org.modsen.practise.exception;
+
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,10 +11,9 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorMessage> onCustomException(CustomException ex){
-        ErrorMessage errorMessage = new ErrorMessage(ex.getStatus(), ex.getMessage());
-        return new ResponseEntity<>(errorMessage, HttpStatusCode.valueOf(ex.getStatus()));
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> onRuntimeException(RuntimeException ex){
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.OK);
     }
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ValidationErrorMessage> onConstraintValidationException(
