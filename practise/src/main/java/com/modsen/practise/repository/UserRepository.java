@@ -1,6 +1,6 @@
-package org.modsen.practise.repository;
+package com.modsen.practise.repository;
 
-import org.modsen.practise.model.User;
+import com.modsen.practise.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

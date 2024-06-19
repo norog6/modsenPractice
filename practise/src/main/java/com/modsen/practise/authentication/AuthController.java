@@ -1,16 +1,13 @@
-package org.modsen.practise.authentication;
+package com.modsen.practise.authentication;
 
 import io.jsonwebtoken.Claims;
 import jakarta.security.auth.message.AuthException;
-import org.modsen.practise.model.User;
-import org.modsen.practise.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;

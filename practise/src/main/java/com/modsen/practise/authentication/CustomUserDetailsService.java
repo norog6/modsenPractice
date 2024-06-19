@@ -1,7 +1,7 @@
-package org.modsen.practise.authentication;
+package com.modsen.practise.authentication;
 
-import org.modsen.practise.model.User;
-import org.modsen.practise.repository.UserRepository;
+import com.modsen.practise.model.User;
+import com.modsen.practise.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

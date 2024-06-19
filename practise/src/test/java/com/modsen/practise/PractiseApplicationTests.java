@@ -1,4 +1,4 @@
-package org.modsen.practise;
+package com.modsen.practise;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

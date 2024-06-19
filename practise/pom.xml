@@ -8,13 +8,13 @@
         <version>3.3.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.modsen</groupId>
+    <groupId>com.modsen</groupId>
     <artifactId>practise</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>practise</name>
     <description>practise</description>
     <properties>
-        <java.version>22</java.version>
+        <java.version>21</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -104,5 +104,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

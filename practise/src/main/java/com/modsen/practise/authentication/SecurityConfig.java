@@ -1,4 +1,4 @@
-package org.modsen.practise.authentication;
+package com.modsen.practise.authentication;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

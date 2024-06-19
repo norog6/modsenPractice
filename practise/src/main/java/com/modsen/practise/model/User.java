@@ -1,4 +1,4 @@
-package org.modsen.practise.model;
+package com.modsen.practise.model;
 
 import jakarta.persistence.*;
 import lombok.*;
