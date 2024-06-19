@@ -1,14 +1,15 @@
 package org.modsen.practise.authentication;
+
 import io.jsonwebtoken.Claims;
 import jakarta.security.auth.message.AuthException;
 import org.modsen.practise.model.User;
 import org.modsen.practise.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,16 +24,11 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private UserRepository userRepository;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     private final Map<String, String> refreshStorage = new HashMap<>();
 
     @PostMapping("/authenticate")
@@ -50,6 +46,11 @@ public class AuthController {
         refreshStorage.put(userDetails.getUsername(), newRefreshToken);
         JwtResponse jwtResponse = new JwtResponse(accessToken, newRefreshToken);
         return ResponseEntity.ok(jwtResponse);
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity<?> registerUser() {
+        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
     }
 
     @PostMapping("/refresh-token")
