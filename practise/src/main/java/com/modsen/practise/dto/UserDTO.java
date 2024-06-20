@@ -15,7 +15,6 @@ import java.util.List;
 public class UserDTO {
     private long id;
 
-    @Email
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is mandatory")
     private String email;
