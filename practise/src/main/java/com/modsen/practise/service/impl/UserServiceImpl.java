@@ -5,6 +5,7 @@ import com.modsen.practise.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,6 +17,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserById(Long id) {
         throw new UnsupportedOperationException("getUserById is not supported");
+    }
+
+    @Override
+    public Optional<UserDTO> getUserByLogin(String login) {
+        throw new UnsupportedOperationException("getUserByLogin is not supported");
     }
 
     @Override
