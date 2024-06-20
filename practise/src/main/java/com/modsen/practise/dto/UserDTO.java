@@ -1,5 +1,6 @@
 package com.modsen.practise.dto;
 
+import com.modsen.practise.entity.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -26,6 +28,8 @@ public class UserDTO {
     @NotBlank(message = "Password is mandatory")
     @Size(min = 6, message = "Password should be at least 6 characters")
     private String password;
+
+    private Set<Role> roles;
 
     private List<OrderDTO> orders;
 }
