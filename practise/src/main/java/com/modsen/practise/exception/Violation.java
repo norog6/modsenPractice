@@ -1,4 +1,4 @@
-package org.modsen.practise.exception;
+package com.modsen.practise.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
