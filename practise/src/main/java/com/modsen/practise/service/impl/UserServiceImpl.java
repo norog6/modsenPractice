@@ -25,6 +25,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<UserDTO> getUserByEmail(String email) {
+        throw new UnsupportedOperationException("getUserByEmail is not supported");
+    }
+
+    @Override
     public UserDTO createUser(UserDTO userDTO) {
         throw new UnsupportedOperationException("createUser is not supported");
     }

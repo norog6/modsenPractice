@@ -1,8 +1,12 @@
 package com.modsen.practise.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +30,18 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "date_of_birth")
+    private Date dateOfBirth;
 
     @ElementCollection(targetClass = Role.class)
     @Enumerated(EnumType.ORDINAL)

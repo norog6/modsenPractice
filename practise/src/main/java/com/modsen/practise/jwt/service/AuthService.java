@@ -1,6 +1,7 @@
 package com.modsen.practise.jwt.service;
 
 import com.modsen.practise.dto.UserDTO;
+import com.modsen.practise.entity.Role;
 import com.modsen.practise.jwt.JwtRequest;
 import com.modsen.practise.jwt.JwtResponse;
 import com.modsen.practise.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,17 @@ public class AuthService {
     private final UserService userService;
     private final JwtProvider jwtProvider;
     private final Map<String, String> refreshStorage = new HashMap<>();
+
+    public UserDTO registration(@NonNull UserDTO user) throws AuthException {
+        if (userService.getUserByLogin(user.getLogin()).isPresent()) {
+            throw new AuthException("User with this login already exist");
+        }
+        if (userService.getUserByEmail(user.getEmail()).isPresent()) {
+            throw new AuthException("User with this email already exist");
+        }
+        user.setRoles(Set.of(Role.CUSTOMER));
+        return userService.createUser(user);
+    }
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
         final UserDTO user = userService.getUserByLogin(authRequest.getLogin())
