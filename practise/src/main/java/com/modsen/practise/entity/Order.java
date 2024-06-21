@@ -4,12 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-
 @Getter
 @Setter
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "orders")
 public class Order {
     @Id
@@ -21,6 +20,6 @@ public class Order {
     @JoinColumn(name = "users_id")
     private User user;
 
-    @OneToMany(mappedBy = "order_items")
+    @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 }
