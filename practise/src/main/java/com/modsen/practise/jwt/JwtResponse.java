@@ -10,9 +10,7 @@ public class JwtResponse {
 
     private final String type = "Bearer";
 
-    @NotBlank(message = "Missing access token")
     private String accessToken;
 
-    @NotBlank(message = "Missing refresh token")
     private String refreshToken;
 }
