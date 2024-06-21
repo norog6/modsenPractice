@@ -7,9 +7,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "categories")
 public class Category {
     @Id
@@ -20,6 +20,6 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "products")
+    @OneToMany(mappedBy = "category")
     private List<Product> products;
 }

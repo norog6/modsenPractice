@@ -5,9 +5,9 @@ import lombok.*;
 
 @Getter
 @Setter
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "order_items")
 public class OrderItem {
     @Id
