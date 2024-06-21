@@ -1,10 +1,8 @@
 package com.modsen.practise.jwt.service;
 
 import com.modsen.practise.dto.UserDTO;
-import com.modsen.practise.entity.Role;
 import com.modsen.practise.jwt.JwtRequest;
 import com.modsen.practise.jwt.JwtResponse;
-import com.modsen.practise.repository.UserRepository;
 import com.modsen.practise.service.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.security.auth.message.AuthException;
@@ -12,7 +10,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +22,8 @@ public class AuthService {
     private final Map<String, String> refreshStorage = new HashMap<>();
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
-        final UserDTO user = new UserDTO(1, "asdasdad", "nikita", "12345", new HashSet<>(List.of(Role.CUSTOMER)), null);/*userService.getUserByLogin(authRequest.getLogin())
-                .orElseThrow(() -> new AuthException("User is not found"));*/
+        final UserDTO user = userService.getUserByLogin(authRequest.getLogin())
+                .orElseThrow(() -> new AuthException("User is not found"));
         if (user.getPassword().equals(authRequest.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
             final String refreshToken = jwtProvider.generateRefreshToken(user);
@@ -41,9 +40,8 @@ public class AuthService {
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final UserDTO user = new UserDTO(1, "asdasdad", "nikita", "12345", null, null);
-                /*final UserDTO user = userService.getUserByLogin(login)
-                        .orElseThrow(() -> new AuthException("User is not found"));*/
+                final UserDTO user = userService.getUserByLogin(login)
+                        .orElseThrow(() -> new AuthException("User is not found"));
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 return new JwtResponse(accessToken, null);
             }
@@ -57,9 +55,8 @@ public class AuthService {
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final UserDTO user = new UserDTO(1, "asdasdad", "nikita", "12345", null, null);
-                /*final UserDTO user = userService.getUserByLogin(login)
-                        .orElseThrow(() -> new AuthException("User is not found"));*/
+                final UserDTO user = userService.getUserByLogin(login)
+                        .orElseThrow(() -> new AuthException("User is not found"));
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 final String newRefreshToken = jwtProvider.generateRefreshToken(user);
                 refreshStorage.put(user.getLogin(), newRefreshToken);

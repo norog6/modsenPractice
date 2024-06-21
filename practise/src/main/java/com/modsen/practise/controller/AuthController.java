@@ -20,7 +20,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseEntity<JwtResponse> login(@Valid @RequestBody JwtRequest authRequest) throws AuthException {
         final JwtResponse token = authService.login(authRequest);
         return ResponseEntity.ok(token);

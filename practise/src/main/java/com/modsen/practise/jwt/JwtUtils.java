@@ -22,7 +22,7 @@ public final class JwtUtils {
 
     private static Set<Role> getRoles(Claims claims) {
         final List<String> roles = claims.get("roles", List.class);
-        return roles == null ? null : roles.stream()
+        return roles.stream()
                 .map(Role::valueOf)
                 .collect(Collectors.toSet());
     }
