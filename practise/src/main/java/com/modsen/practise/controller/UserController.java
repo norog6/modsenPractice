@@ -1,10 +1,15 @@
 package com.modsen.practise.controller;
 
+import com.modsen.practise.dto.ProductDTO;
 import com.modsen.practise.dto.UserDTO;
 import com.modsen.practise.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +26,15 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<List<UserDTO>> getAllUsersByPage(@RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
+                                                           @RequestParam(value = "limit", defaultValue = "10") @Min(1) @Max(100) Integer limit,
+                                                           @RequestParam(value = "sort", required = false) String sortField) {
+        Page<UserDTO> page = userService.getAllUsersByPage(PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, sortField)));
+        List<UserDTO> users = page.getContent();
         return ResponseEntity.ok(users);
     }
 

@@ -1,10 +1,15 @@
 package com.modsen.practise.controller;
 
+import com.modsen.practise.dto.ProductDTO;
 import com.modsen.practise.service.OrderItemService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import com.modsen.practise.dto.OrderItemDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +26,15 @@ public class OrderItemController {
     @GetMapping
     public ResponseEntity<List<OrderItemDTO>> getAllOrderItems() {
         List<OrderItemDTO> orderItems = orderItemService.getAllOrderItems();
+        return ResponseEntity.ok(orderItems);
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<List<OrderItemDTO>> getAllOrderItemsByPage(@RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
+                                                                     @RequestParam(value = "limit", defaultValue = "10") @Min(1) @Max(100) Integer limit,
+                                                                     @RequestParam(value = "sort", required = false) String sortField) {
+        Page<OrderItemDTO> page = orderItemService.getAllOrderItemsByPage(PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, sortField)));
+        List<OrderItemDTO> orderItems = page.getContent();
         return ResponseEntity.ok(orderItems);
     }
 

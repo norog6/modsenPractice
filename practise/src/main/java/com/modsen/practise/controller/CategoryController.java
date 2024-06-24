@@ -3,8 +3,12 @@ package com.modsen.practise.controller;
 import com.modsen.practise.dto.CategoryDTO;
 import com.modsen.practise.service.CategoryService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,14 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> getAllCategories() {
         List<CategoryDTO> categories = categoryService.getAllCategories();
+        return ResponseEntity.ok(categories);
+    }
+    @GetMapping("/page")
+    public ResponseEntity<List<CategoryDTO>> getAllCategoriesByPage(@RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
+                                                                    @RequestParam(value = "limit", defaultValue = "10") @Min(1) @Max(100) Integer limit,
+                                                                    @RequestParam(value = "sort", required = false) String sortField) {
+        Page<CategoryDTO> page = categoryService.getAllCategoriesByPage(PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, sortField)));
+        List<CategoryDTO> categories = page.getContent();
         return ResponseEntity.ok(categories);
     }
 

@@ -19,7 +19,7 @@ public class OrderDTO {
     @Valid
     private UserDTO user;
 
-    @NotEmpty(message = "Order must have at least one item")
-    @Valid
-    private List<OrderItemDTO> orderItems;
+//    @NotEmpty(message = "Order must have at least one item")
+//    @Valid
+//    private List<OrderItemDTO> orderItems;
 }

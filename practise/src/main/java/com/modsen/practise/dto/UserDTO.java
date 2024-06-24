@@ -48,6 +48,6 @@ public class UserDTO {
     private Date dateOfBirth;
 
     private Set<Role> roles;
-
-    private List<OrderDTO> orders;
+//
+//    private List<OrderDTO> orders;
 }
