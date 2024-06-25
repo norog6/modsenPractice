@@ -4,11 +4,16 @@ import com.modsen.practise.dto.UserDTO;
 import com.modsen.practise.entity.Role;
 import com.modsen.practise.jwt.JwtRequest;
 import com.modsen.practise.jwt.JwtResponse;
+import com.modsen.practise.jwt.JwtUtils;
 import com.modsen.practise.service.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.security.auth.message.AuthException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,7 +22,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService implements LogoutHandler {
 
     private final UserService userService;
     private final JwtProvider jwtProvider;
@@ -33,6 +38,7 @@ public class AuthService {
         user.setRoles(Set.of(Role.CUSTOMER));
         return userService.createUser(user);
     }
+
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
         final UserDTO user = userService.getUserByLogin(authRequest.getLogin())
@@ -79,4 +85,13 @@ public class AuthService {
         throw new AuthException("JWT token is invalid");
     }
 
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        final String token = JwtUtils.getTokenFromRequest(request);
+        if (token != null) {
+            final Claims claims = jwtProvider.getAccessClaims(token);
+            final String login = claims.getSubject();
+            refreshStorage.remove(login);
+        }
+    }
 }
