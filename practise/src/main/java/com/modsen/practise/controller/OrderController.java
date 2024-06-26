@@ -1,6 +1,5 @@
 package com.modsen.practise.controller;
 
-import com.modsen.practise.dto.CategoryDTO;
 import com.modsen.practise.dto.OrderDTO;
 import com.modsen.practise.service.OrderService;
 import jakarta.validation.Valid;

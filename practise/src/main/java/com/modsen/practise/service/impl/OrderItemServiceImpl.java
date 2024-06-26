@@ -1,9 +1,7 @@
 package com.modsen.practise.service.impl;
 
-import com.modsen.practise.dto.CategoryDTO;
 import com.modsen.practise.dto.OrderDTO;
 import com.modsen.practise.dto.ProductDTO;
-import com.modsen.practise.entity.Category;
 import com.modsen.practise.entity.Order;
 import com.modsen.practise.entity.OrderItem;
 import com.modsen.practise.entity.Product;

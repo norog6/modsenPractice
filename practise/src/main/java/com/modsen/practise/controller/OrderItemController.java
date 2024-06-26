@@ -1,6 +1,5 @@
 package com.modsen.practise.controller;
 
-import com.modsen.practise.dto.ProductDTO;
 import com.modsen.practise.service.OrderItemService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
