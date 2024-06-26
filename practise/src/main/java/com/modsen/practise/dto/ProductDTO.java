@@ -28,6 +28,4 @@ public class ProductDTO {
     @Valid
     private CategoryDTO category;
 
-//    @Valid
-//    private List<OrderItemDTO> orderItems;
 }

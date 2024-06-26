@@ -49,6 +49,6 @@ public class User {
     @Column(name = "roles")
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
 }

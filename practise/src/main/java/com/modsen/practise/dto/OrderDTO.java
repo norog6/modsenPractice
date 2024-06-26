@@ -1,7 +1,6 @@
 package com.modsen.practise.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,8 +17,4 @@ public class OrderDTO {
     @NotNull(message = "User is mandatory")
     @Valid
     private UserDTO user;
-
-//    @NotEmpty(message = "Order must have at least one item")
-//    @Valid
-//    private List<OrderItemDTO> orderItems;
 }

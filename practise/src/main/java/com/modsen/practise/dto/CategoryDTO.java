@@ -19,6 +19,4 @@ public class CategoryDTO {
     @Size(max = 100, message = "Name should not exceed 100 characters")
     private String name;
 
-//    @Valid
-//    private List<ProductDTO> products;
 }
