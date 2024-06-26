@@ -51,15 +51,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDTO> getUserByLogin(String login) {
-        User user = userRepository.findByLogin(login);
-        return Optional.ofNullable(user).map(userMapper::toDto);
+        return userRepository.findByLogin(login)
+                .map(userMapper::toDto);
     }
 
     @Override
     public Optional<UserDTO> getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        return Optional.ofNullable(user).map(userMapper::toDto);
+        return userRepository.findByEmail(email)
+                .map(userMapper::toDto);
     }
+
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
@@ -70,7 +71,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(Long id, UserDTO userDTO) {
-        throw new UnsupportedOperationException("updateUser is not supported");
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        user.setEmail(userDTO.getEmail());
+        user.setGender(userDTO.getGender());
+        user.setLogin(userDTO.getLogin());
+        user.setPassword(userDTO.getPassword());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setRoles(userDTO.getRoles());
+        user.setDateOfBirth(userDTO.getDateOfBirth());
+        User updatedUser = userRepository.save(user);
+        return userMapper.toDto(updatedUser);
     }
 
     @Override

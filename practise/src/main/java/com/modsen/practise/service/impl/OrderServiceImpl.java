@@ -1,10 +1,13 @@
 package com.modsen.practise.service.impl;
 
 
+import com.modsen.practise.dto.CategoryDTO;
 import com.modsen.practise.dto.OrderDTO;
-import com.modsen.practise.entity.Order;
-import com.modsen.practise.entity.User;
+import com.modsen.practise.dto.OrderItemDTO;
+import com.modsen.practise.entity.*;
+import com.modsen.practise.mapper.OrderItemMapper;
 import com.modsen.practise.mapper.OrderMapper;
+import com.modsen.practise.repository.OrderItemRepository;
 import com.modsen.practise.repository.OrderRepository;
 import com.modsen.practise.repository.UserRepository;
 import com.modsen.practise.service.OrderService;
@@ -14,7 +17,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +27,9 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
 
     @Override
     public List<OrderDTO> getAllOrders() {
@@ -89,9 +96,10 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDTO> getOrdersByUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        List<Order> orders = orderRepository.findByUserId(userId);
-        return orders.stream()
-                .map(orderMapper::toDto)
-                .collect(Collectors.toList());
+        Optional<List<Order>> orders = orderRepository.findByUserId(userId);
+        return orders.map(orderList -> orderList.stream()
+                        .map(orderMapper::toDto)
+                        .collect(Collectors.toList()))
+                .orElseThrow(() -> new ResourceNotFoundException("Orders not found for user with id: " + userId));
     }
 }

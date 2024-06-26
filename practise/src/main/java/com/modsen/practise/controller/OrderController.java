@@ -32,8 +32,10 @@ public class OrderController {
     @GetMapping("/page")
     public ResponseEntity<List<OrderDTO>> getAllOrdersByPage(@RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
                                                              @RequestParam(value = "limit", defaultValue = "10") @Min(1) @Max(100) Integer limit,
-                                                             @RequestParam(value = "sort", required = false) String sortField) {
-        Page<OrderDTO> page = orderService.getAllOrdersByPage(PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, sortField)));
+                                                             @RequestParam(value = "sort", required = false) String sortField,
+                                                             @RequestParam(value = "direction", defaultValue = "asc") String sortDirection){
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection.toLowerCase());
+        Page<OrderDTO> page = orderService.getAllOrdersByPage(PageRequest.of(offset, limit, Sort.by(direction, sortField)));
         List<OrderDTO> orders = page.getContent();
         return ResponseEntity.ok(orders);
     }

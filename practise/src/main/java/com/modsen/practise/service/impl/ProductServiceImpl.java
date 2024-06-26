@@ -16,6 +16,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,10 +57,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getProductsByCategory(Long categoryId) {
-        List<Product> products = productRepository.findByCategoryId(categoryId);
-        if (products.isEmpty()) {
-            throw new ResourceNotFoundException("No products found for category with id: " + categoryId);
-        }
+        Optional<List<Product>> optionalProducts = productRepository.findByCategoryId(categoryId);
+        List<Product> products = optionalProducts.orElseThrow(() -> new ResourceNotFoundException("No products found for category with id: " + categoryId));
         return products.stream()
                 .map(productMapper::toDto)
                 .collect(Collectors.toList());
