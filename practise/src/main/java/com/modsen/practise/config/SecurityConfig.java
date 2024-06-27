@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         request -> request
-                                .requestMatchers("/api/auth/login", "/api/auth/token", "/api/auth/registration")
+                                .requestMatchers("/api/auth/login", "/api/auth/token", "/api/auth/registration",
+                                        "/api/products/**", "/api/categories/**")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )
