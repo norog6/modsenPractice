@@ -25,11 +25,9 @@ public class SecurityConfig {
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         request -> request
-                                .requestMatchers("/api/auth/login", "/api/auth/token", "/api/auth/registration","/api/categories"
-                                ,"/api/products","/api/users","/api/order-items",
-                                        "/api/orders")
+                                .requestMatchers("/api/auth/login", "/api/auth/token", "/api/auth/registration")
                                     .permitAll()
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
                 )
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
