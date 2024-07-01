@@ -17,11 +17,11 @@ public class Product {
     @Column(name = "id")
     private long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categories_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<OrderItem> orderItems;
 
     @Column(name = "name")

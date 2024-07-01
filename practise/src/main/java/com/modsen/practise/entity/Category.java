@@ -20,6 +20,6 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Product> products;
 }

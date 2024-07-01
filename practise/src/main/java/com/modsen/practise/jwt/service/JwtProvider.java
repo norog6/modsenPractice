@@ -1,6 +1,6 @@
 package com.modsen.practise.jwt.service;
 
-import com.modsen.practise.dto.UserDTO;
+import com.modsen.practise.dto.RequestUserDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -30,7 +30,7 @@ public class JwtProvider {
         this.jwtRefreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtRefreshSecret));
     }
 
-    public String generateAccessToken(@NonNull UserDTO user) {
+    public String generateAccessToken(@NonNull RequestUserDTO user) {
         final LocalDateTime now = LocalDateTime.now();
         final Instant accessExpirationInstant = now.plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
@@ -43,7 +43,7 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateRefreshToken(@NonNull UserDTO user) {
+    public String generateRefreshToken(@NonNull RequestUserDTO user) {
         final LocalDateTime now = LocalDateTime.now();
         final Instant refreshExpirationInstant = now.plusDays(30).atZone(ZoneId.systemDefault()).toInstant();
         final Date refreshExpiration = Date.from(refreshExpirationInstant);

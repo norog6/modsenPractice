@@ -1,13 +1,16 @@
 package com.modsen.practise.service;
-import com.modsen.practise.dto.OrderDTO;
+import com.modsen.practise.dto.RequestOrderDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
 public interface OrderService {
-    List<OrderDTO> getAllOrders();
-    OrderDTO getOrderById(Long id);
-    OrderDTO createOrder(OrderDTO orderDTO);
-    OrderDTO updateOrder(Long id, OrderDTO orderDTO);
+    List<RequestOrderDTO> getAllOrders();
+    Page<RequestOrderDTO> getAllOrdersByPage(PageRequest pageRequest);
+    RequestOrderDTO getOrderById(Long id);
+    RequestOrderDTO createOrder(RequestOrderDTO requestOrderDTO);
+    RequestOrderDTO updateOrder(Long id, RequestOrderDTO requestOrderDTO);
     void deleteOrder(Long id);
-    List<OrderDTO> getOrdersByUser(Long userId);
+    List<RequestOrderDTO> getOrdersByUser(Long userId);
 }

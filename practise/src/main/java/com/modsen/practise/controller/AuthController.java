@@ -1,6 +1,6 @@
 package com.modsen.practise.controller;
 
-import com.modsen.practise.dto.UserDTO;
+import com.modsen.practise.dto.RequestUserDTO;
 import com.modsen.practise.jwt.JwtRequest;
 import com.modsen.practise.jwt.JwtResponse;
 import com.modsen.practise.jwt.RefreshJwtRequest;
@@ -23,8 +23,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/registration")
-    public ResponseEntity<UserDTO> registration(@Valid @RequestBody UserDTO userDTO) throws AuthException {
-        UserDTO createdUser = authService.registration(userDTO);
+    public ResponseEntity<RequestUserDTO> registration(@Valid @RequestBody RequestUserDTO requestUserDTO) throws AuthException {
+        RequestUserDTO createdUser = authService.registration(requestUserDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
