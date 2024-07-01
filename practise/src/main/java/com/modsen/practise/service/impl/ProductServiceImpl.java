@@ -16,6 +16,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public RequestProductDTO createProduct(RequestProductDTO requestProductDTO) {
         RequestCategoryDTO requestCategoryDTO = requestProductDTO.getCategory();
-        Category category = categoryRepository.findByName(requestCategoryDTO.getName());
+        Category category = categoryRepository.findByName(requestCategoryDTO.getName()).get();
         Product product = productMapper.toEntity(requestProductDTO);
         product.setCategory(category);
         Product savedProduct = productRepository.save(product);

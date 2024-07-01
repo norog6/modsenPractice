@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<RequestOrderDTO> getAllOrders() {
-        List<Order> orders = orderRepository.findAllOrders();
+        List<Order> orders = orderRepository.findAll();
         if (orders.isEmpty()) {
             throw new ResourceNotFoundException("No orders found");
         }

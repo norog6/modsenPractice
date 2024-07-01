@@ -7,8 +7,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestProductDTO {

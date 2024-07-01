@@ -10,7 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query("SELECT o FROM Order o")
-    List<Order> findAllOrders();
     List<Order> findByUserId(Long userId);
 }
