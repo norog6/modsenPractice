@@ -1,18 +1,15 @@
 package com.modsen.practise.dto;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDTO {
+public class RequestCategoryDTO {
     private long id;
 
     @NotBlank(message = "Name is mandatory")

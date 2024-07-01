@@ -1,6 +1,6 @@
 package com.modsen.practise.service.impl;
 
-import com.modsen.practise.dto.UserDTO;
+import com.modsen.practise.dto.RequestUserDTO;
 import com.modsen.practise.entity.User;
 import com.modsen.practise.mapper.UserMapper;
 import com.modsen.practise.repository.UserRepository;
@@ -23,66 +23,66 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public List<UserDTO> getAllUsers() {
+    public List<RequestUserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
             throw new ResourceNotFoundException("No users found");
         }
         return users.stream()
-                .map(userMapper::toDto)
+                .map(userMapper::toREQDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Page<UserDTO> getAllUsersByPage(PageRequest pageRequest) {
+    public Page<RequestUserDTO> getAllUsersByPage(PageRequest pageRequest) {
         Page<User> userPage = userRepository.findAll(pageRequest);
         if (userPage.isEmpty()) {
             throw new ResourceNotFoundException("No users found.");
         }
-        return userPage.map(userMapper::toDto);
+        return userPage.map(userMapper::toREQDto);
     }
 
     @Override
-    public UserDTO getUserById(Long id) {
+    public RequestUserDTO getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-        return userMapper.toDto(user);
+        return userMapper.toREQDto(user);
     }
 
     @Override
-    public Optional<UserDTO> getUserByLogin(String login) {
+    public Optional<RequestUserDTO> getUserByLogin(String login) {
         return userRepository.findByLogin(login)
-                .map(userMapper::toDto);
+                .map(userMapper::toREQDto);
     }
 
     @Override
-    public Optional<UserDTO> getUserByEmail(String email) {
+    public Optional<RequestUserDTO> getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .map(userMapper::toDto);
+                .map(userMapper::toREQDto);
     }
 
 
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
-        User user = userMapper.toEntity(userDTO);
+    public RequestUserDTO createUser(RequestUserDTO requestUserDTO) {
+        User user = userMapper.toEntity(requestUserDTO);
         User savedUser = userRepository.save(user);
-        return userMapper.toDto(savedUser);
+        return userMapper.toREQDto(savedUser);
     }
 
     @Override
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
+    public RequestUserDTO updateUser(Long id, RequestUserDTO requestUserDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-        user.setEmail(userDTO.getEmail());
-        user.setGender(userDTO.getGender());
-        user.setLogin(userDTO.getLogin());
-        user.setPassword(userDTO.getPassword());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setRoles(userDTO.getRoles());
-        user.setDateOfBirth(userDTO.getDateOfBirth());
+        user.setEmail(requestUserDTO.getEmail());
+        user.setGender(requestUserDTO.getGender());
+        user.setLogin(requestUserDTO.getLogin());
+        user.setPassword(requestUserDTO.getPassword());
+        user.setFirstName(requestUserDTO.getFirstName());
+        user.setLastName(requestUserDTO.getLastName());
+        user.setRoles(requestUserDTO.getRoles());
+        user.setDateOfBirth(requestUserDTO.getDateOfBirth());
         User updatedUser = userRepository.save(user);
-        return userMapper.toDto(updatedUser);
+        return userMapper.toREQDto(updatedUser);
     }
 
     @Override

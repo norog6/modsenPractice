@@ -4,16 +4,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDTO {
+public class RequestProductDTO {
     private long id;
 
     @NotBlank(message = "Product name is mandatory")
@@ -26,6 +24,6 @@ public class ProductDTO {
 
     @NotNull(message = "Category is mandatory")
     @Valid
-    private CategoryDTO category;
+    private RequestCategoryDTO category;
 
 }

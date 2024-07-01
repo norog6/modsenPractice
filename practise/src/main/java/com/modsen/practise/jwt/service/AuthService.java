@@ -1,6 +1,6 @@
 package com.modsen.practise.jwt.service;
 
-import com.modsen.practise.dto.UserDTO;
+import com.modsen.practise.dto.RequestUserDTO;
 import com.modsen.practise.entity.Role;
 import com.modsen.practise.jwt.JwtRequest;
 import com.modsen.practise.jwt.JwtResponse;
@@ -23,7 +23,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final Map<String, String> refreshStorage = new HashMap<>();
 
-    public UserDTO registration(@NonNull UserDTO user) throws AuthException {
+    public RequestUserDTO registration(@NonNull RequestUserDTO user) throws AuthException {
         if (userService.getUserByLogin(user.getLogin()).isPresent()) {
             throw new AuthException("User with this login already exist");
         }
@@ -35,7 +35,7 @@ public class AuthService {
     }
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
-        final UserDTO user = userService.getUserByLogin(authRequest.getLogin())
+        final RequestUserDTO user = userService.getUserByLogin(authRequest.getLogin())
                 .orElseThrow(() -> new AuthException("User is not found"));
         if (user.getPassword().equals(authRequest.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
@@ -53,7 +53,7 @@ public class AuthService {
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final UserDTO user = userService.getUserByLogin(login)
+                final RequestUserDTO user = userService.getUserByLogin(login)
                         .orElseThrow(() -> new AuthException("User is not found"));
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 return new JwtResponse(accessToken, null);
@@ -68,7 +68,7 @@ public class AuthService {
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final UserDTO user = userService.getUserByLogin(login)
+                final RequestUserDTO user = userService.getUserByLogin(login)
                         .orElseThrow(() -> new AuthException("User is not found"));
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 final String newRefreshToken = jwtProvider.generateRefreshToken(user);

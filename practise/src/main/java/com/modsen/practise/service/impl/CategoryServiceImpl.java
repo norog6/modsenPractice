@@ -1,6 +1,6 @@
 package com.modsen.practise.service.impl;
 
-import com.modsen.practise.dto.CategoryDTO;
+import com.modsen.practise.dto.RequestCategoryDTO;
 import com.modsen.practise.entity.Category;
 import com.modsen.practise.mapper.CategoryMapper;
 import com.modsen.practise.repository.CategoryRepository;
@@ -19,48 +19,48 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     @Override
-    public List<CategoryDTO> getAllCategories() {
+    public List<RequestCategoryDTO> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
         if (categories.isEmpty()) {
             throw new ResourceNotFoundException("No categories found");
         }
         return categories.stream()
-                .map(categoryMapper::toDto)
+                .map(categoryMapper::toREQDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Page<CategoryDTO> getAllCategoriesByPage(PageRequest pageRequest) {
+    public Page<RequestCategoryDTO> getAllCategoriesByPage(PageRequest pageRequest) {
         Page<Category> categoryPage = categoryRepository.findAll(pageRequest);
         if (categoryPage.isEmpty()) {
             throw new ResourceNotFoundException("No categories found.");
         }
-        return categoryPage.map(categoryMapper::toDto);
+        return categoryPage.map(categoryMapper::toREQDto);
     }
 
     @Override
-    public CategoryDTO getCategoryById(Long id) {
+    public RequestCategoryDTO getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
-        return categoryMapper.toDto(category);
+        return categoryMapper.toREQDto(category);
     }
     @Override
-    public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        Category category = categoryMapper.toEntity(categoryDTO);
+    public RequestCategoryDTO createCategory(RequestCategoryDTO requestCategoryDTO) {
+        Category category = categoryMapper.toEntity(requestCategoryDTO);
         if (categoryRepository.existsByName(category.getName())) {
             throw new IllegalArgumentException("Category with this name already exists");
         }
         Category savedCategory = categoryRepository.save(category);
-        return categoryMapper.toDto(savedCategory);
+        return categoryMapper.toREQDto(savedCategory);
     }
 
     @Override
-    public CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO) {
+    public RequestCategoryDTO updateCategory(Long id, RequestCategoryDTO requestCategoryDTO) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
-        category.setName(categoryDTO.getName());
+        category.setName(requestCategoryDTO.getName());
         Category updatedCategory = categoryRepository.save(category);
-        return categoryMapper.toDto(updatedCategory);
+        return categoryMapper.toREQDto(updatedCategory);
     }
 
     @Override

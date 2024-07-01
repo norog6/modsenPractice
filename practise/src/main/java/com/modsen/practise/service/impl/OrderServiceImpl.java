@@ -1,11 +1,16 @@
 package com.modsen.practise.service.impl;
 
-import com.modsen.practise.dto.OrderDTO;
-import com.modsen.practise.entity.*;
+import com.modsen.practise.dto.RequestOrderDTO;
+import com.modsen.practise.dto.RequestOrderItemDTO;
+import com.modsen.practise.entity.Order;
+import com.modsen.practise.entity.OrderItem;
+import com.modsen.practise.entity.Product;
+import com.modsen.practise.entity.User;
 import com.modsen.practise.mapper.OrderItemMapper;
 import com.modsen.practise.mapper.OrderMapper;
 import com.modsen.practise.repository.OrderItemRepository;
 import com.modsen.practise.repository.OrderRepository;
+import com.modsen.practise.repository.ProductRepository;
 import com.modsen.practise.repository.UserRepository;
 import com.modsen.practise.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,59 +31,76 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
+    private final ProductRepository productRepository;
 
     @Override
-    public List<OrderDTO> getAllOrders() {
-        List<Order> orders = orderRepository.findAll();
+    public List<RequestOrderDTO> getAllOrders() {
+        List<Order> orders = orderRepository.findAllOrders();
         if (orders.isEmpty()) {
             throw new ResourceNotFoundException("No orders found");
         }
+
         return orders.stream()
-                .map(orderMapper::toDto)
+                .map(orderMapper::toREQDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Page<OrderDTO> getAllOrdersByPage(PageRequest pageRequest) {
+    public Page<RequestOrderDTO> getAllOrdersByPage(PageRequest pageRequest) {
         Page<Order> orderPage = orderRepository.findAll(pageRequest);
         if (orderPage.isEmpty()) {
             throw new ResourceNotFoundException("No orders found.");
         }
-        return orderPage.map(orderMapper::toDto);
+        return orderPage.map(orderMapper::toREQDto);
     }
 
     @Override
-    public OrderDTO getOrderById(Long id) {
+    public RequestOrderDTO getOrderById(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
-        return orderMapper.toDto(order);
+        return orderMapper.toREQDto(order);
     }
 
     @Override
-    public OrderDTO createOrder(OrderDTO orderDTO) {
-        User user = userRepository.findById(orderDTO.getUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + orderDTO.getUser().getId()));
+    public RequestOrderDTO createOrder(RequestOrderDTO requestOrderDTO) {
+        User user = userRepository.findById(requestOrderDTO.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + requestOrderDTO.getUser().getId()));
 
-        Order order = orderMapper.toEntity(orderDTO);
+        Order order = orderMapper.toEntity(requestOrderDTO);
         order.setUser(user);
 
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (RequestOrderItemDTO itemDTO : requestOrderDTO.getOrderItems()) {
+            Product product = productRepository.findById(itemDTO.getProduct().getId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProduct(product);
+            orderItem.setQuantityOfProducts(itemDTO.getQuantityOfProducts());
+            orderItem.setOrder(order);
+            orderItems.add(orderItem);
+        }
+
+        order.setOrderItems(orderItems);
         Order savedOrder = orderRepository.save(order);
-        return orderMapper.toDto(savedOrder);
+
+        orderItemRepository.saveAll(orderItems);
+        return orderMapper.toREQDto(savedOrder);
     }
 
     @Override
-    public OrderDTO updateOrder(Long id, OrderDTO orderDTO) {
+    public RequestOrderDTO updateOrder(Long id, RequestOrderDTO requestOrderDTO) {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
 
-        User user = userRepository.findById(orderDTO.getUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + orderDTO.getUser().getId()));
+        User user = userRepository.findById(requestOrderDTO.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + requestOrderDTO.getUser().getId()));
 
-        Order order = orderMapper.toEntity(orderDTO);
+        Order order = orderMapper.toEntity(requestOrderDTO);
         order.setId(existingOrder.getId());
         order.setUser(user);
         Order updatedOrder = orderRepository.save(order);
-        return orderMapper.toDto(updatedOrder);
+        return orderMapper.toREQDto(updatedOrder);
     }
 
     @Override
@@ -90,13 +111,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> getOrdersByUser(Long userId) {
+    public List<RequestOrderDTO> getOrdersByUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        Optional<List<Order>> orders = orderRepository.findByUserId(userId);
-        return orders.map(orderList -> orderList.stream()
-                        .map(orderMapper::toDto)
-                        .collect(Collectors.toList()))
-                .orElseThrow(() -> new ResourceNotFoundException("Orders not found for user with id: " + userId));
+        List<Order> orders = orderRepository.findByUserId(userId);
+        return orders.stream()
+                .map(orderMapper::toREQDto)
+                .collect(Collectors.toList());
     }
 }

@@ -1,7 +1,7 @@
 package com.modsen.practise.service.impl;
 
-import com.modsen.practise.dto.CategoryDTO;
-import com.modsen.practise.dto.ProductDTO;
+import com.modsen.practise.dto.RequestCategoryDTO;
+import com.modsen.practise.dto.RequestProductDTO;
 import com.modsen.practise.entity.Category;
 import com.modsen.practise.entity.Product;
 import com.modsen.practise.mapper.CategoryMapper;
@@ -16,7 +16,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,73 +28,70 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryMapper categoryMapper;
 
     @Override
-    public List<ProductDTO> getAllProducts() {
+    public List<RequestProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty()) {
             throw new ResourceNotFoundException("No products found");
         }
         return products.stream()
-                .map(productMapper::toDto)
+                .map(productMapper::toREQDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Page<ProductDTO> getAllProductsByPage(PageRequest pageRequest) {
+    public Page<RequestProductDTO> getAllProductsByPage(PageRequest pageRequest) {
         Page<Product> productPage = productRepository.findAll(pageRequest);
         if (productPage.isEmpty()) {
             throw new ResourceNotFoundException("No products found.");
         }
-        return productPage.map(productMapper::toDto);
+        return productPage.map(productMapper::toREQDto);
     }
 
     @Override
-    public ProductDTO getProductById(Long id) {
+    public RequestProductDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
-        return productMapper.toDto(product);
+        return productMapper.toREQDto(product);
     }
 
     @Override
-    public List<ProductDTO> getProductsByCategory(Long categoryId) {
-        Optional<List<Product>> optionalProducts = productRepository.findByCategoryId(categoryId);
-        List<Product> products = optionalProducts.orElseThrow(() -> new ResourceNotFoundException("No products found for category with id: " + categoryId));
+    public List<RequestProductDTO> getProductsByCategory(Long categoryId) {
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+       if (products.isEmpty())
+        {new ResourceNotFoundException("No products found for category with id: " + categoryId);}
         return products.stream()
-                .map(productMapper::toDto)
+                .map(productMapper::toREQDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ProductDTO createProduct(ProductDTO productDTO) {
-        CategoryDTO categoryDTO = productDTO.getCategory();
-        Category category = categoryRepository.findByName(categoryDTO.getName())
-                .orElseGet(() -> {
-                    Category newCategory = categoryMapper.toEntity(categoryDTO);
-                    return categoryRepository.save(newCategory);
-                });
-        Product product = productMapper.toEntity(productDTO);
+    public RequestProductDTO createProduct(RequestProductDTO requestProductDTO) {
+        RequestCategoryDTO requestCategoryDTO = requestProductDTO.getCategory();
+        Category category = categoryRepository.findByName(requestCategoryDTO.getName());
+        Product product = productMapper.toEntity(requestProductDTO);
         product.setCategory(category);
         Product savedProduct = productRepository.save(product);
-        return productMapper.toDto(savedProduct);
+        return productMapper.toREQDto(savedProduct);
     }
 
     @Override
-    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
+    public RequestProductDTO updateProduct(Long id, RequestProductDTO requestProductDTO) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
 
-        existingProduct.setName(productDTO.getName());
-        existingProduct.setDescription(productDTO.getDescription());
-        existingProduct.setPrice(productDTO.getPrice());
+        existingProduct.setName(requestProductDTO.getName());
+        existingProduct.setDescription(requestProductDTO.getDescription());
+        existingProduct.setPrice(requestProductDTO.getPrice());
 
-        CategoryDTO categoryDTO = productDTO.getCategory();
-        if (categoryDTO != null && categoryDTO.getId() != existingProduct.getCategory().getId()) {
-            Category category = categoryRepository.findById(categoryDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryDTO.getId()));
+        RequestCategoryDTO requestCategoryDTO = requestProductDTO.getCategory();
+        if (requestCategoryDTO != null && requestCategoryDTO.getId() != existingProduct.getCategory().getId()) {
+            Category category = categoryRepository.findById(requestCategoryDTO.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + requestCategoryDTO.getId()));
             existingProduct.setCategory(category);
         }
 
         Product updatedProduct = productRepository.save(existingProduct);
-        return productMapper.toDto(updatedProduct);
+        return productMapper.toREQDto(updatedProduct);
     }
 
     @Override
